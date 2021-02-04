@@ -31,7 +31,6 @@ INDIC_LANGS = [
     "ml", "mr", "or", "pa", "ta", "te"
 ]
 
-
 class IndicCorpusConfig(tfds.core.BuilderConfig):
     """BuilderConfig for IndicCorpus"""
 
@@ -99,11 +98,18 @@ class IndicCorpus(tfds.core.GeneratorBasedBuilder):
 
     def _generate_examples(self, split, path):
         """Yields examples."""
-        # TODO(indic_corpus): Yields (key, example) tuples from the dataset
-        with open(path, 'r') as f:
-            lines = f.read()
-            lines = lines.split('\n')[:-1]
-            for id_, line in enumerate(lines):
-                yield id_, {
-                    "text": line
-                }
+        beam = tfds.core.lazy_imports.apache_beam
+
+        def _process_file(path):
+            with open(path, 'r') as f:
+                lines = f.read()
+                lines = lines.split('\n')[:-1]
+                for id_, line in enumerate(lines):
+                    yield id_, {
+                        "text": line
+                    }
+
+        return (
+            beam.Create(path)
+            | beam.Map(_process_file)
+        )
