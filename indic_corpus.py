@@ -1,5 +1,5 @@
 """indic_corpus dataset."""
-
+import tensorflow as tf
 import tensorflow_datasets as tfds
 
 # TODO(indic_corpus): Markdown description  that will appear on the catalog page.
@@ -30,6 +30,7 @@ INDIC_LANGS = [
     "as", "bn", "en", "gu", "hi", "kn",
     "ml", "mr", "or", "pa", "ta", "te"
 ]
+
 
 class IndicCorpusConfig(tfds.core.BuilderConfig):
     """BuilderConfig for IndicCorpus"""
@@ -101,7 +102,7 @@ class IndicCorpus(tfds.core.GeneratorBasedBuilder):
         beam = tfds.core.lazy_imports.apache_beam
 
         def _process_file(path):
-            with open(path, 'r') as f:
+            with tf.io.gfile.GFile(path, 'r') as f:
                 lines = f.read()
                 lines = lines.split('\n')[:-1]
                 for id_, line in enumerate(lines):
