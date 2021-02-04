@@ -110,5 +110,6 @@ class IndicCorpus(tfds.core.GeneratorBasedBuilder):
                     }
 
         return (
-            beam.Map(_process_file)
+            beam.Create([path])
+            | beam.Map(_process_file)
         )
