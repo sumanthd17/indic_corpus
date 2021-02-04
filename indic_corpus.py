@@ -27,7 +27,8 @@ RELEASE_NOTES = {
 }
 
 INDIC_LANGS = [
-    "as"
+    "as", "bn", "en", "gu", "hi", "kn",
+    "ml", "mr", "or", "pa", "ta", "te"
 ]
 
 
